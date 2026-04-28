@@ -37,6 +37,7 @@
         padding: 120px 60px;
         background: linear-gradient(180deg, #ffffff, #f8f8f8);
         position: relative;
+        width: 100%;
       }
 
       /* Title */
@@ -51,14 +52,25 @@
         margin-bottom: 12px;
       }
 
+      /* fallback for custom property if --primary not defined */
+      .section-badge {
+        color: #c4996c;
+      }
+
       .section-title h2 {
         font-size: 40px;
         font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .section-title h2 span {
+        color: #c4996c;
       }
 
       .section-title p {
         font-size: 16px;
         color: black;
+        opacity: 0.8;
       }
 
       /* Grid */
@@ -126,7 +138,7 @@
 
       .learn-card p {
         font-size: 14.5px;
-        color: var(--gray);
+        color: #5a5a5a;
         line-height: 1.6;
       }
 
@@ -138,7 +150,9 @@
         font-size: 44px;
         font-weight: 700;
         color: rgba(0, 0, 0, 0.06);
+        user-select: none;
       }
+
       .cta-learn {
         margin-top: 60px;
         text-align: center;
@@ -146,81 +160,155 @@
         color: #777;
       }
 
-      /* Mobile */
+      .cta-learn strong {
+        color: #c4996c;
+        font-weight: 700;
+      }
       @media (max-width: 768px) {
         .learn-section {
-          padding: 66px 0;
+          padding: 66px 20px;
         }
 
+        /* Transform grid into centered column without any horizontal scroll */
         .learn-grid {
-          margin-top: 40px;
           display: flex;
-          gap: 16px;
-          overflow-x: auto;
-          scroll-snap-type: x mandatory;
-          padding: 0 20px;
-
-          /* smooth scroll */
-          scroll-behavior: smooth;
-
-          /* hide scrollbar */
-          -ms-overflow-style: none;
-          scrollbar-width: none;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 28px;
+          /* remove any grid-related overflow */
+          overflow: visible;
+          margin-top: 48px;
         }
 
-        .learn-grid::-webkit-scrollbar {
-          display: none;
-        }
-
+        /* Each card: centered width, no horizontal scroll on small devices */
         .learn-card {
-          min-width: 80%;
-          max-width: 80%;
-          flex: 0 0 auto;
-          scroll-snap-align: center;
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+          width: 100%;
+          max-width: 460px; /* comfortable reading width, centered */
+          min-width: unset;
+          margin: 0 auto; /* ensure centering inside flex column */
+          padding: 36px 28px;
         }
 
+        /* Title adaptations for readability, but keeping style consistent */
         .section-title h2 {
           font-size: 32px;
-          padding: 0 20px;
+          text-align: center;
         }
 
         .section-title p {
-          padding: 0 20px;
-        }
-        .learn-section {
-          overflow: hidden; /* prevents weird horizontal bleed */
+          text-align: center;
+          font-size: 15px;
+          max-width: 90%;
+          margin-left: auto;
+          margin-right: auto;
         }
 
-        .learn-grid {
-          align-items: stretch; /* keeps cards full height */
-          padding: 10px 20px 30px;
+        .section-badge {
+          display: table;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        /* cta text centered on mobile */
+        .cta-learn {
+          margin-top: 48px;
+          padding: 0 8px;
+        }
+
+        /* ensure step number doesn't cause overflow */
+        .learn-step {
+          font-size: 38px;
+          top: 16px;
+          right: 20px;
+        }
+
+        /* no horizontal scroll anywhere */
+        body,
+        .learn-section,
+        .page-container {
+          overflow-x: hidden;
         }
       }
 
-      /* ================= ANIMATION ================= */
+      /* additional safeguard for extremely narrow devices (<= 480px) */
+      @media (max-width: 480px) {
+        .learn-card {
+          max-width: 100%;
+          padding: 32px 20px;
+        }
+        .learn-section {
+          padding: 48px 16px;
+        }
+        .learn-icon {
+          width: 48px;
+          height: 48px;
+          font-size: 20px;
+        }
+        .learn-card h4 {
+          font-size: 17px;
+        }
+      }
+
+      @media (min-width: 769px) {
+        /* ensure desktop grid exactly as provided original */
+        .learn-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+          gap: 40px;
+          margin-top: 70px;
+        }
+        .learn-card {
+          max-width: none;
+          margin: 0;
+        }
+        .section-title h2 {
+          text-align: left;
+        }
+        .section-title p {
+          text-align: left;
+        }
+        .section-badge {
+          margin-left: 0;
+          margin-right: 0;
+        }
+      }
+
+      /* small but important: any leftover animation keyframes from your original style */
       @keyframes fadeUp {
         from {
           opacity: 0;
           transform: translateY(40px);
         }
-
         to {
           opacity: 1;
           transform: translateY(0);
         }
       }
 
-      @media (max-width: 900px) {
-        .hero {
-          flex-direction: column;
-          gap: 40px;
-        }
+      /* subtle fade-in for cards (optional, adds polish but no layout shift) */
+      .learn-card {
+        animation: fadeUp 0.5s ease forwards;
+        opacity: 0;
+        animation-delay: calc(0.05s * var(--order, 1));
+      }
+      .learn-card:nth-child(1) {
+        --order: 1;
+      }
+      .learn-card:nth-child(2) {
+        --order: 2;
+      }
+      .learn-card:nth-child(3) {
+        --order: 3;
+      }
+      .learn-card:nth-child(4) {
+        --order: 4;
+      }
 
-        .form-card {
-          margin-left: 0;
-          width: 100%;
-        }
+      /* also ensure body background consistency and prevent overscroll weirdness */
+      html {
+        overflow-x: hidden;
+        scroll-behavior: smooth;
       }
 
       /* ===== WHY ATTEND SECTION ===== */
@@ -229,9 +317,51 @@
         padding: 60px 60px;
         background: linear-gradient(180deg, #f9f9f9, #ffffff);
         position: relative;
+        width: 100%;
       }
 
-      /* Grid */
+      /* section title - matching original style */
+      .section-title {
+        text-align: center;
+        max-width: 780px;
+        margin: 0 auto;
+      }
+
+      .section-badge {
+        display: inline-block;
+        background: rgba(196, 153, 108, 0.12);
+        color: #b47c44;
+        font-weight: 600;
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 6px 14px;
+        border-radius: 40px;
+        margin-bottom: 20px;
+      }
+
+      .section-title h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 14px;
+        color: #1e2329;
+        letter-spacing: -0.02em;
+      }
+
+      .section-title h2 span {
+        background: linear-gradient(135deg, #c49a6c, #a57248);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+      }
+
+      .section-title p {
+        font-size: 1rem;
+        color: #5b6874;
+        font-weight: 450;
+      }
+
+      /* GRID — exactly as original: auto-fit, minmax(260px,1fr), gap 40px */
       .why-grid {
         margin-top: 70px;
         display: grid;
@@ -239,7 +369,7 @@
         gap: 40px;
       }
 
-      /* Card */
+      /* CARD FORMAT — original styling, no breaking changes */
       .why-card {
         background: white;
         padding: 42px 34px;
@@ -251,7 +381,7 @@
         overflow: hidden;
       }
 
-      /* Premium top border */
+      /* premium top border */
       .why-card::before {
         content: "";
         position: absolute;
@@ -259,11 +389,7 @@
         left: 0;
         width: 100%;
         height: 4px;
-        background: linear-gradient(
-          90deg,
-          var(--primary),
-          rgba(196, 153, 108, 0.4)
-        );
+        background: linear-gradient(90deg, #c49a6c, rgba(196, 153, 108, 0.4));
         opacity: 0;
         transition: 0.4s;
       }
@@ -277,7 +403,7 @@
         box-shadow: 0 35px 70px rgba(0, 0, 0, 0.12);
       }
 
-      /* Icon */
+      /* Icon styling */
       .why-icon {
         width: 54px;
         height: 54px;
@@ -294,53 +420,132 @@
         background: rgba(0, 0, 0, 0.08);
       }
 
-      /* Text */
       .why-card h4 {
         font-size: 18px;
         font-weight: 600;
         margin-bottom: 12px;
+        color: #1f2a3a;
       }
 
       .why-card p {
         font-size: 14.5px;
-        color: var(--gray);
+        color: #5f6c7a;
         line-height: 1.7;
       }
 
-      /* Mobile */
+      /* CTA text — original style, full width inline block */
+      .cta-learn {
+        text-align: center;
+        margin-top: 58px;
+        font-size: 1rem;
+        font-weight: 450;
+        color: #2c3e4e;
+        background: transparent;
+        padding: 12px 0 0;
+      }
+
+      .cta-learn strong {
+        color: #c17b42;
+        font-weight: 800;
+      }
+
+      /* ========== RESPONSIVE: simple column, centered, NO SCROLLING, NO HORIZONTAL SWIPE ========== */
       @media (max-width: 768px) {
         .why-section {
-          padding: 42px 0;
-          overflow: hidden;
+          padding: 48px 24px;
+        }
+
+        .section-title h2 {
+          font-size: 2rem;
+        }
+
+        .section-title p {
+          font-size: 0.9rem;
         }
 
         .why-grid {
-          margin-top: 40px;
-          display: flex;
-          gap: 16px;
-          overflow-x: auto;
-          scroll-snap-type: x mandatory;
-          padding: 10px 20px 30px;
-
-          scroll-behavior: smooth;
-
-          /* hide scrollbar */
-          -ms-overflow-style: none;
-          scrollbar-width: none;
+          display: block; /* removes grid / flex overflow */
+          margin-top: 48px;
+          padding: 0;
+          gap: 0;
+          /* no overflow-x, no scroll snap, no forced scroll */
         }
 
-        .why-grid::-webkit-scrollbar {
-          display: none;
+        /* each card becomes a centered block with natural width */
+        .why-card {
+          display: block;
+          width: 100%;
+          max-width: 520px; /* comfortable reading width, centered */
+          margin-left: auto;
+          margin-right: auto;
+          margin-bottom: 28px;
+          padding: 36px 28px;
+          box-shadow: 0 12px 26px rgba(0, 0, 0, 0.05);
+          transition:
+            transform 0.25s ease,
+            box-shadow 0.25s;
+        }
+
+        .why-card:last-child {
+          margin-bottom: 0;
+        }
+
+        /* keep hover effect elegant but subtle on touch */
+        .why-card:hover {
+          transform: translateY(-6px);
+          box-shadow: 0 25px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        /* preserve card interior spacing */
+        .why-icon {
+          width: 52px;
+          height: 52px;
+          font-size: 22px;
+          margin-bottom: 20px;
+        }
+
+        .why-card h4 {
+          font-size: 1.25rem;
+        }
+
+        .why-card p {
+          font-size: 0.9rem;
+          line-height: 1.6;
+        }
+
+        .cta-learn {
+          margin-top: 48px;
+          font-size: 0.95rem;
+          padding: 12px 16px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .why-section {
+          padding: 36px 20px;
         }
 
         .why-card {
-          min-width: 80%;
-          max-width: 80%;
-          flex: 0 0 auto;
-          scroll-snap-align: center;
-
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+          padding: 28px 22px;
+          max-width: 100%;
+          margin-left: auto;
+          margin-right: auto;
         }
+
+        .why-card h4 {
+          font-size: 1.2rem;
+        }
+
+        .section-title h2 {
+          font-size: 1.75rem;
+        }
+      }
+
+      /* ensure NO horizontal overflow anywhere */
+      body,
+      .why-section,
+      .why-grid {
+        overflow-x: hidden;
       }
 
       /* ===== WHO SHOULD ATTEND ===== */
@@ -543,7 +748,6 @@
         color: #bbb;
       }
 
-      /* RESPONSIVE */
       @media (max-width: 900px) {
         .expert-container {
           grid-template-columns: 1fr;
@@ -568,6 +772,270 @@
           padding: 13px 13px;
           text-align: center;
         }
+      }
+
+      @media (max-width: 900px) {
+        .expert-container {
+          gap: 40px; /* reduces gap for better flow */
+        }
+
+        .expert-image {
+          max-width: 520px; /* allow bigger width than original 420px limitation */
+          margin-left: auto;
+          margin-right: auto;
+          width: 100%;
+        }
+
+        /* ensure img takes full width of its parent and looks prominent */
+        .expert-image img {
+          width: 100%;
+          max-width: 520px;
+          display: block;
+          margin: 0 auto;
+          box-shadow: 0 30px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        /* content: better centering in tablet mode (but text still aligned center) 
+         and increase left/right breathing */
+        .expert-content {
+          max-width: 650px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        /* make badge and headings slightly more balanced for readability */
+        .expert-content h2 {
+          font-size: 34px;
+        }
+
+        .expert-content h3 {
+          font-size: 26px;
+        }
+
+        .expert-desc {
+          font-size: 16px;
+          line-height: 1.75;
+          padding: 0 6px;
+        }
+
+        /* stats items already grid: 1fr 1fr — fine but keep consistent internal spacing */
+        .expert-stats {
+          gap: 24px;
+        }
+
+        .expert-stats div {
+          padding: 20px 12px;
+        }
+
+        /* fine tune for content readability */
+        .expert-role {
+          font-size: 15px;
+        }
+      }
+
+      @media (min-width: 701px) and (max-width: 900px) {
+        .expert-image {
+          max-width: 560px; /* even better presence on tablets */
+        }
+        .expert-container {
+          gap: 50px;
+        }
+      }
+
+      @media (max-width: 700px) {
+        .expert-section {
+          padding: 80px 30px;
+        }
+
+        .expert-image {
+          max-width: 460px; /* on medium phones and small tablets, image stands out */
+          width: 90%;
+        }
+
+        .expert-content {
+          width: 100%;
+        }
+
+        .expert-content h2 {
+          font-size: 30px;
+        }
+
+        .expert-content h3 {
+          font-size: 24px;
+        }
+
+        .expert-badge {
+          font-size: 11px;
+          padding: 5px 12px;
+        }
+      }
+
+      @media (max-width: 550px) {
+        .expert-section {
+          padding: 60px 24px;
+        }
+
+        .expert-container {
+          gap: 32px;
+        }
+
+        .expert-image {
+          max-width: 380px;
+          width: 90%;
+        }
+
+        .expert-image img {
+          border-radius: 24px;
+        }
+
+        .expert-content h2 {
+          font-size: 28px;
+          margin-bottom: 12px;
+        }
+
+        .expert-content h3 {
+          font-size: 22px;
+        }
+
+        .expert-desc {
+          font-size: 15px;
+          margin-bottom: 18px;
+        }
+
+        .expert-stats {
+          margin-top: 20px;
+          gap: 16px;
+        }
+
+        .expert-stats div {
+          padding: 16px 10px;
+        }
+
+        .expert-stats strong {
+          font-size: 20px;
+        }
+
+        .expert-stats span {
+          font-size: 12px;
+        }
+      }
+
+      @media (max-width: 400px) {
+        .expert-section {
+          padding: 50px 16px;
+        }
+
+        .expert-image {
+          max-width: 320px;
+          width: 100%;
+        }
+
+        .expert-content h2 {
+          font-size: 26px;
+        }
+
+        .expert-content h3 {
+          font-size: 20px;
+        }
+
+        .expert-desc {
+          font-size: 14.5px;
+          line-height: 1.7;
+        }
+
+        .expert-stats div {
+          padding: 14px 10px;
+        }
+
+        .expert-stats strong {
+          font-size: 19px;
+        }
+      }
+
+      @media (min-width: 901px) {
+        .expert-container {
+          grid-template-columns: 420px 1fr;
+          gap: 70px;
+        }
+        .expert-image {
+          max-width: none; /* reset any accidental max-width from media queries */
+          width: auto;
+        }
+        .expert-image img {
+          width: 100%;
+          max-width: 100%;
+        }
+        .expert-content {
+          max-width: 100%;
+          margin: 0;
+          text-align: left;
+        }
+        .expert-content h2,
+        .expert-content h3,
+        .expert-desc {
+          text-align: left;
+        }
+        .expert-badge {
+          text-align: left;
+          display: inline-block;
+        }
+        .expert-stats {
+          text-align: left;
+        }
+        .expert-stats div {
+          text-align: center;
+        }
+      }
+
+      @media (max-width: 900px) {
+        .expert-content {
+          text-align: center;
+        }
+        .expert-badge {
+          display: inline-block;
+          margin-left: auto;
+          margin-right: auto;
+          text-align: center;
+        }
+        .expert-stats {
+          justify-items: center;
+        }
+        .expert-stats div {
+          width: 100%;
+        }
+        .expert-desc {
+          max-width: 600px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+        .expert-role {
+          text-align: center;
+        }
+        /* headings already center aligned with parent text-align */
+      }
+
+      /* for very small devices fine-tune stat cards layout  */
+      @media (max-width: 520px) {
+        .expert-stats {
+          justify-items: center;
+        }
+        .expert-stats div {
+          width: 100%;
+          max-width: 280px;
+          margin: 0 auto;
+        }
+      }
+
+      /* Ensure that any hover effects remain on all devices */
+      .expert-stats div {
+        transition:
+          transform 0.2s ease,
+          background 0.2s;
+      }
+
+      /* consistent rounded & flow */
+      img {
+        display: block;
       }
 
       /* ===== OUR PROCESS ===== */
@@ -998,94 +1466,454 @@
       .testimonials-section {
         padding: 80px 60px;
         background: #fff;
-      }
-
-      .testimonials-grid {
-        max-width: 1100px;
-        margin: 70px auto 0;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 30px;
-      }
-
-      /* Card */
-      .testimonial-card {
-        background: #fff;
-        border-radius: 18px;
-        padding: 34px 30px;
-        border: 1px solid #eee;
         position: relative;
-        transition: 0.35s ease;
+        width: 100%;
       }
 
-      .testimonial-card::before {
-        content: "“";
-        position: absolute;
-        top: -30px;
-        left: 22px;
-        font-size: 120px;
-        color: rgba(196, 153, 108, 0.15);
-        font-family: serif;
+      .section-title {
+        text-align: center;
+        max-width: 700px;
+        margin: 0 auto;
       }
 
-      .testimonial-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
-      }
-
-      /* Highlighted */
-      .testimonial-card.featured {
-        border: 2px solid rgb(196, 153, 108);
-        background: linear-gradient(180deg, #fff, #faf6f1);
-      }
-
-      /* Text */
-      .testimonial-text {
-        font-size: 15px;
-        line-height: 1.8;
-        color: #444;
-        margin-bottom: 28px;
-      }
-
-      /* User */
-      .testimonial-user {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-      }
-
-      .user-avatar {
-        width: 46px;
-        height: 46px;
-        border-radius: 50%;
-        background: #111;
-        color: #fff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+      .section-title h2 {
+        font-size: 2.4rem;
         font-weight: 600;
+        letter-spacing: -0.3px;
+        color: #1a1e2b;
+        text-align: center;
       }
 
-      .user-avatar.gold {
-        background: rgb(196, 153, 108);
-        color: #111;
+      .section-title h2 span {
+        color: rgb(196, 153, 108);
       }
 
-      .testimonial-user strong {
-        display: block;
-        font-size: 14px;
-        font-weight: 600;
+      .section-title p {
+        margin-top: 12px;
+        font-size: 1.05rem;
+        color: #5b5f6e;
+        text-align: center;
       }
 
-      .testimonial-user span {
-        font-size: 12px;
-        color: #777;
+      /* ========= DESKTOP LAYOUT (>=992px) - ORIGINAL STATIC GRID (NO CHANGES) ========= */
+      @media (min-width: 992px) {
+        .testimonials-grid {
+          max-width: 1100px;
+          margin: 70px auto 0;
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 30px;
+        }
+
+        /* Hide mobile carousel elements on desktop */
+        .mobile-carousel-container,
+        .carousel-controls,
+        .carousel-dots {
+          display: none !important;
+        }
+
+        /* Original card styling */
+        .testimonial-card {
+          background: #fff;
+          border-radius: 18px;
+          padding: 34px 30px;
+          border: 1px solid #eee;
+          position: relative;
+          transition: 0.35s ease;
+        }
+
+        .testimonial-card::before {
+          content: "“";
+          position: absolute;
+          top: -30px;
+          left: 22px;
+          font-size: 120px;
+          color: rgba(196, 153, 108, 0.15);
+          font-family: serif;
+          pointer-events: none;
+        }
+
+        .testimonial-card:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
+        }
+
+        .testimonial-card.featured {
+          border: 2px solid rgb(196, 153, 108);
+          background: linear-gradient(180deg, #fff, #faf6f1);
+        }
+
+        .testimonial-text {
+          font-size: 15px;
+          line-height: 1.8;
+          color: #444;
+          margin-bottom: 28px;
+        }
+
+        .testimonial-user {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+        }
+
+        .user-avatar {
+          width: 46px;
+          height: 46px;
+          border-radius: 50%;
+          background: #111;
+          color: #fff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 600;
+          font-size: 1.2rem;
+        }
+
+        .user-avatar.gold {
+          background: rgb(196, 153, 108);
+          color: #111;
+        }
+
+        .testimonial-user strong {
+          display: block;
+          font-size: 14px;
+          font-weight: 600;
+        }
+
+        .testimonial-user span {
+          font-size: 12px;
+          color: #777;
+        }
       }
 
-      /* Mobile */
-      @media (max-width: 768px) {
+      /* ========= MOBILE & TABLET: PURE SWIPEABLE CAROUSEL - NO AUTO-SCROLL, NO PULLING ========= */
+      @media (max-width: 991px) {
         .testimonials-section {
-          padding: 90px 24px;
+          padding: 60px 16px 70px 16px;
+        }
+
+        /* Hide original static grid */
+        .testimonials-grid {
+          display: none;
+        }
+
+        /* Carousel container - stable, no overflow weirdness */
+        .mobile-carousel-container {
+          position: relative;
+          margin-top: 48px;
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          overflow: visible;
+        }
+
+        /* Scrollable track - perfectly swipeable, natural momentum, no pulling */
+        .carousel-track {
+          display: flex;
+          gap: 20px;
+          overflow-x: auto;
+          scroll-snap-type: x mandatory;
+          scroll-behavior: smooth;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: thin;
+          scrollbar-color: rgb(196, 153, 108) #f0f0f0;
+          padding: 8px 12px 32px 12px;
+          cursor: grab;
+          /* Important: prevents the browser from doing aggressive "pull-to-refresh" or rubber-banding that ruins UX */
+          overscroll-behavior-x: contain;
+          /* ensures smooth snapping without forced recenter glitches */
+          scroll-snap-stop: always;
+          /* improves swipe feel */
+          touch-action: pan-x pan-y;
+        }
+
+        .carousel-track:active {
+          cursor: grabbing;
+        }
+
+        /* Gentle custom scrollbar (barely visible but functional) */
+        .carousel-track::-webkit-scrollbar {
+          height: 4px;
+        }
+
+        .carousel-track::-webkit-scrollbar-track {
+          background: #f0f0f0;
+          border-radius: 10px;
+          margin: 0 12px;
+        }
+
+        .carousel-track::-webkit-scrollbar-thumb {
+          background: rgb(196, 153, 108);
+          border-radius: 10px;
+        }
+
+        /* Cards - fixed width, consistent snapping, perfect centering */
+        .carousel-track .testimonial-card {
+          flex: 0 0 auto;
+          width: 86%;
+          max-width: 360px;
+          scroll-snap-align: center;
+          background: #fff;
+          border-radius: 20px;
+          padding: 28px 22px;
+          border: 1px solid #eee;
+          position: relative;
+          transition:
+            transform 0.2s cubic-bezier(0.2, 0, 0, 1),
+            box-shadow 0.25s ease;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+          margin: 0;
+        }
+
+        /* First & last card spacing — ensures symmetrical scrolling without pulling */
+        .carousel-track .testimonial-card:first-child {
+          margin-left: 8px;
+        }
+
+        .carousel-track .testimonial-card:last-child {
+          margin-right: 8px;
+        }
+
+        .carousel-track .testimonial-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 20px 32px rgba(0, 0, 0, 0.1);
+          border-color: rgba(196, 153, 108, 0.4);
+        }
+
+        /* Quote mark styling */
+        .carousel-track .testimonial-card::before {
+          content: "“";
+          position: absolute;
+          top: -22px;
+          left: 20px;
+          font-size: 96px;
+          color: rgba(196, 153, 108, 0.15);
+          font-family: serif;
+          pointer-events: none;
+        }
+
+        .carousel-track .testimonial-card.featured {
+          border: 2px solid rgb(196, 153, 108);
+          background: linear-gradient(180deg, #fff, #faf6f1);
+        }
+
+        .carousel-track .testimonial-text {
+          font-size: 15px;
+          line-height: 1.65;
+          color: #1e1e2a;
+          margin-bottom: 22px;
+          font-weight: 450;
+        }
+
+        .carousel-track .testimonial-user {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .carousel-track .user-avatar {
+          width: 44px;
+          height: 44px;
+          border-radius: 50%;
+          background: #111;
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 600;
+          font-size: 1rem;
+          flex-shrink: 0;
+        }
+
+        .carousel-track .user-avatar.gold {
+          background: rgb(196, 153, 108);
+          color: #111;
+        }
+
+        .carousel-track .testimonial-user strong {
+          display: block;
+          font-size: 14px;
+          font-weight: 700;
+          color: #1a1e2b;
+        }
+
+        .carousel-track .testimonial-user span {
+          display: block;
+          font-size: 11px;
+          color: #888;
+          margin-top: 2px;
+        }
+
+        /* Navigation Buttons - Optional, but user-friendly (they don't interfere with swipe) */
+        .carousel-btn {
+          position: absolute;
+          top: 45%;
+          transform: translateY(-50%);
+          background: white;
+          border: 1px solid #e9e9ef;
+          border-radius: 50%;
+          width: 42px;
+          height: 42px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+          transition: all 0.2s cubic-bezier(0.2, 0.8, 0.4, 1);
+          z-index: 12;
+          color: #3a3a44;
+        }
+
+        .carousel-btn:hover {
+          background: rgb(196, 153, 108);
+          border-color: rgb(196, 153, 108);
+          color: white;
+          box-shadow: 0 8px 16px rgba(196, 153, 108, 0.25);
+        }
+
+        .carousel-btn:active {
+          transform: translateY(-50%) scale(0.94);
+        }
+
+        .carousel-btn svg {
+          width: 20px;
+          height: 20px;
+          stroke: currentColor;
+          stroke-width: 2.2;
+          stroke-linecap: round;
+          stroke-linejoin: round;
+          fill: none;
+        }
+
+        .carousel-btn.prev {
+          left: -5px;
+        }
+
+        .carousel-btn.next {
+          right: -5px;
+        }
+
+        /* Dots indicator — reflects swiped position, purely visual */
+        .carousel-dots {
+          display: flex;
+          justify-content: center;
+          gap: 12px;
+          margin-top: 28px;
+          margin-bottom: 4px;
+        }
+
+        .dot {
+          width: 8px;
+          height: 8px;
+          background: #d4d4dc;
+          border-radius: 50%;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          border: none;
+          padding: 0;
+        }
+
+        .dot.active {
+          background: rgb(196, 153, 108);
+          width: 28px;
+          border-radius: 12px;
+        }
+
+        /* Tablet specific adjustments */
+        @media (min-width: 600px) {
+          .carousel-track .testimonial-card {
+            width: 70%;
+            max-width: 420px;
+          }
+
+          .carousel-btn {
+            width: 46px;
+            height: 46px;
+          }
+
+          .carousel-btn.prev {
+            left: 8px;
+          }
+
+          .carousel-btn.next {
+            right: 8px;
+          }
+
+          .carousel-track {
+            padding: 8px 20px 32px 20px;
+            gap: 24px;
+          }
+        }
+
+        @media (min-width: 768px) {
+          .testimonials-section {
+            padding: 70px 32px;
+          }
+
+          .carousel-track .testimonial-card {
+            width: 62%;
+            max-width: 460px;
+          }
+
+          .carousel-btn.prev {
+            left: 12px;
+          }
+
+          .carousel-btn.next {
+            right: 12px;
+          }
+        }
+
+        /* Small phones: perfect swipe with no glitch */
+        @media (max-width: 480px) {
+          .testimonials-section {
+            padding: 48px 12px;
+          }
+
+          .carousel-track {
+            gap: 14px;
+            padding: 5px 6px 28px 6px;
+          }
+
+          .carousel-track .testimonial-card {
+            width: 88%;
+            padding: 22px 18px;
+          }
+
+          .carousel-track .testimonial-card:first-child {
+            margin-left: 4px;
+          }
+
+          .carousel-track .testimonial-card:last-child {
+            margin-right: 4px;
+          }
+
+          .carousel-btn {
+            width: 38px;
+            height: 38px;
+          }
+
+          .carousel-btn.prev {
+            left: -2px;
+          }
+
+          .carousel-btn.next {
+            right: -2px;
+          }
+
+          .carousel-track .testimonial-card::before {
+            font-size: 80px;
+            top: -18px;
+            left: 14px;
+          }
+
+          .dot {
+            width: 6px;
+            height: 6px;
+          }
+          .dot.active {
+            width: 22px;
+          }
         }
       }
 
@@ -1160,7 +1988,7 @@
       }
 
       .hero-left h1 {
-        font-size: clamp(2.8rem, 4vw, 3.7rem);
+        font-size: clamp(33.5px, 4vw, 3.7rem);
         line-height: 1.15;
         font-weight: 700;
       }
@@ -1237,6 +2065,13 @@
         .hero-trust-wrap {
           grid-template-columns: max-content;
           justify-content: center;
+        }
+        .trust-item {
+          gap: 10px;
+          padding: 11px 15px;
+        }
+        .TI-content {
+          text-align: left;
         }
         .hero-bg {
           position: absolute;
@@ -1492,7 +2327,7 @@
           <div class="hero-trust-wrap">
             <div class="trust-item">
               <span class="trust-icon">✔</span>
-              <div>
+              <div class="TI-content">
                 <strong>AMFI Registered MFD</strong>
                 <small>ARN-108618</small>
               </div>
@@ -1500,7 +2335,7 @@
 
             <div class="trust-item">
               <span class="trust-icon">⏳</span>
-              <div>
+              <div class="TI-content">
                 <strong>20+ Years Experience</strong>
                 <small>Decades of market Experience</small>
               </div>
@@ -1508,9 +2343,9 @@
 
             <div class="trust-item">
               <span class="trust-icon">🎯</span>
-              <div>
+              <div class="TI-content">
                 <strong>Goal-Based Planning</strong>
-                <small>Invest with purpose, not guesswork</small>
+                <small>Smart investing, no guessing</small>
               </div>
             </div>
 
@@ -1635,96 +2470,61 @@
     </section>
 
     <!-- WHAT YOU WILL LEARN -->
-    <section class="learn-section">
-      <div class="section-title">
-        <span class="section-badge">Webinar Curriculum</span>
-        <h2>What You Will <span>Learn</span></h2>
-        <p>Clear, structured insights you can apply immediately</p>
-      </div>
-
-      <div class="learn-grid">
-        <div class="learn-card">
-          <div class="learn-icon">🎯</div>
-          <h4>Goal-Oriented Wealth Planning</h4>
-          <p>
-            Turn your life goals into a structured investment roadmap instead of
-            reacting to market noise.
-          </p>
-          <span class="learn-step">01</span>
+    <div class="page-container">
+      <section class="learn-section">
+        <div class="section-title">
+          <span class="section-badge">Webinar Curriculum</span>
+          <h2>What You Will <span>Learn</span></h2>
+          <p>Clear, structured insights you can apply immediately</p>
         </div>
 
-        <div class="learn-card">
-          <div class="learn-icon">💰</div>
-          <h4>Alpha Generation Strategies</h4>
-          <p>
-            Learn how to outperform average returns through smart allocation,
-            disciplined investing, and opportunity spotting.
-          </p>
-          <span class="learn-step">02</span>
+        <div class="learn-grid">
+          <div class="learn-card">
+            <div class="learn-icon">🎯</div>
+            <h4>Goal-Oriented Wealth Planning</h4>
+            <p>
+              Turn your life goals into a structured investment roadmap instead
+              of reacting to market noise.
+            </p>
+            <span class="learn-step">01</span>
+          </div>
+
+          <div class="learn-card">
+            <div class="learn-icon">💰</div>
+            <h4>Alpha Generation Strategies</h4>
+            <p>
+              Learn how to outperform average returns through smart allocation,
+              disciplined investing, and opportunity spotting.
+            </p>
+            <span class="learn-step">02</span>
+          </div>
+
+          <div class="learn-card">
+            <div class="learn-icon">🛡</div>
+            <h4>Wealth Preservation & Protection</h4>
+            <p>
+              Safeguard your capital with risk management, diversification, and
+              downside protection strategies.
+            </p>
+            <span class="learn-step">03</span>
+          </div>
+
+          <div class="learn-card">
+            <div class="learn-icon">📄</div>
+            <h4>Legacy & Wealth Transfer Planning</h4>
+            <p>
+              Ensure your wealth outlives you. Structure your assets for smooth,
+              tax-efficient transfer across generations.
+            </p>
+            <span class="learn-step">04</span>
+          </div>
         </div>
-
-        <div class="learn-card">
-          <div class="learn-icon">🛡</div>
-          <h4>Wealth Preservation & Protection</h4>
-          <p>
-            Safeguard your capital with risk management, diversification, and
-            downside protection strategies.
-          </p>
-          <span class="learn-step">03</span>
-        </div>
-
-        <div class="learn-card">
-          <div class="learn-icon">📄</div>
-          <h4>Legacy & Wealth Transfer Planning</h4>
-          <p>
-            Ensure your wealth outlives you. Structure your assets for smooth,
-            tax-efficient transfer across generations.
-          </p>
-          <span class="learn-step">04</span>
-        </div>
-      </div>
-      <p class="cta-learn">
-        Ready to take control of your financial future? Register
-        <strong>FREEE</strong> now!
-      </p>
-    </section>
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const slider = document.querySelector(".learn-grid");
-        const cards = document.querySelectorAll(".learn-card");
-
-        if (!slider || cards.length === 0) return;
-
-        let index = 0;
-
-        function scrollToCard(i) {
-          const cardWidth = cards[i].offsetWidth + 16; // include gap
-          slider.scrollTo({
-            left: i * cardWidth,
-            behavior: "smooth",
-          });
-        }
-
-        function autoScroll() {
-          index++;
-
-          if (index >= cards.length) {
-            index = 0;
-          }
-
-          scrollToCard(index);
-        }
-
-        let autoSlide = setInterval(autoScroll, 3000);
-
-        // Pause on touch
-        slider.addEventListener("touchstart", () => clearInterval(autoSlide));
-        slider.addEventListener("touchend", () => {
-          autoSlide = setInterval(autoScroll, 3000);
-        });
-      });
-    </script>
-
+        <p class="cta-learn">
+          Ready to take control of your financial future? Register
+          <strong>FREE</strong> now!
+        </p>
+      </section>
+    </div>
     <!-- WHY THIS WEBINAR -->
 
     <section class="why-section">
@@ -1773,46 +2573,6 @@
         fast!
       </p>
     </section>
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const whySlider = document.querySelector(".why-grid");
-        const whyCards = document.querySelectorAll(".why-card");
-
-        if (!whySlider || whyCards.length === 0) return;
-
-        let whyIndex = 0;
-
-        function scrollWhyCard(i) {
-          const cardWidth = whyCards[i].offsetWidth + 16;
-
-          whySlider.scrollTo({
-            left: i * cardWidth,
-            behavior: "smooth",
-          });
-        }
-
-        function autoScrollWhy() {
-          whyIndex++;
-
-          if (whyIndex >= whyCards.length) {
-            whyIndex = 0;
-          }
-
-          scrollWhyCard(whyIndex);
-        }
-
-        let whyAutoSlide = setInterval(autoScrollWhy, 3000);
-
-        // pause on touch
-        whySlider.addEventListener("touchstart", () =>
-          clearInterval(whyAutoSlide),
-        );
-
-        whySlider.addEventListener("touchend", () => {
-          whyAutoSlide = setInterval(autoScrollWhy, 3000);
-        });
-      });
-    </script>
 
     <!-- WHO ATTEND THIS WEBINAR -->
     <section class="attend-section">
@@ -2119,9 +2879,10 @@
     <section class="testimonials-section">
       <div class="section-title">
         <h2>What Our <span>Participants Say</span></h2>
-        <p>Real experiences from families & professionals we’ve helped</p>
+        <p>Real experiences from families & professionals we've helped</p>
       </div>
 
+      <!-- DESKTOP STATIC GRID (exactly as original, no changes) -->
       <div class="testimonials-grid">
         <div class="testimonial-card">
           <div class="testimonial-text">
@@ -2129,7 +2890,6 @@
             pushing, just pure understanding of how to align investments with
             life goals.”
           </div>
-
           <div class="testimonial-user">
             <div class="user-avatar">S</div>
             <div>
@@ -2138,14 +2898,12 @@
             </div>
           </div>
         </div>
-
         <div class="testimonial-card featured">
           <div class="testimonial-text">
             “I finally understood how retirement income actually works. The
             approach was ethical, structured and very practical. Highly
             recommended for families.”
           </div>
-
           <div class="testimonial-user">
             <div class="user-avatar gold">A</div>
             <div>
@@ -2154,14 +2912,12 @@
             </div>
           </div>
         </div>
-
         <div class="testimonial-card">
           <div class="testimonial-text">
             “Unlike others, there was no hype or fear-based selling. Everything
             was explained calmly with long-term thinking. That itself builds
             trust.”
           </div>
-
           <div class="testimonial-user">
             <div class="user-avatar">S</div>
             <div>
@@ -2171,7 +2927,281 @@
           </div>
         </div>
       </div>
+
+      <!-- MOBILE / TABLET: PURE SWIPEABLE CAROUSEL (No auto-scroll, no pulling) -->
+      <div class="mobile-carousel-container" id="mobileCarousel">
+        <div class="carousel-track" id="carouselTrack">
+          <!-- Card 1 -->
+          <div class="testimonial-card">
+            <div class="testimonial-text">
+              “This webinar gave me clarity I never had before. No product
+              pushing, just pure understanding of how to align investments with
+              life goals.”
+            </div>
+            <div class="testimonial-user">
+              <div class="user-avatar">S</div>
+              <div>
+                <strong>Shahrukh G.</strong>
+                <span>Business Owner</span>
+              </div>
+            </div>
+          </div>
+          <!-- Card 2 (featured) -->
+          <div class="testimonial-card featured">
+            <div class="testimonial-text">
+              “I finally understood how retirement income actually works. The
+              approach was ethical, structured and very practical. Highly
+              recommended for families.”
+            </div>
+            <div class="testimonial-user">
+              <div class="user-avatar gold">A</div>
+              <div>
+                <strong>Anjan Mukhopadhyay</strong>
+                <span>Retired Professional</span>
+              </div>
+            </div>
+          </div>
+          <!-- Card 3 -->
+          <div class="testimonial-card">
+            <div class="testimonial-text">
+              “Unlike others, there was no hype or fear-based selling.
+              Everything was explained calmly with long-term thinking. That
+              itself builds trust.”
+            </div>
+            <div class="testimonial-user">
+              <div class="user-avatar">S</div>
+              <div>
+                <strong>Sanjog K.</strong>
+                <span>Salaried Professional</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Optional but helpful arrow buttons (they don't break swipe) -->
+        <button class="carousel-btn prev" id="prevBtn" aria-label="Previous">
+          <svg viewBox="0 0 24 24">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
+        <button class="carousel-btn next" id="nextBtn" aria-label="Next">
+          <svg viewBox="0 0 24 24">
+            <path d="M9 18l6-6-6-6" />
+          </svg>
+        </button>
+
+        <!-- Dot indicators (sync with swipe) -->
+        <div class="carousel-dots" id="carouselDots"></div>
+      </div>
     </section>
+
+    <script>
+      (function () {
+        // Only enables carousel behavior on mobile/tablet view (width <= 991px)
+        const isMobileView = () => window.innerWidth <= 991;
+
+        const track = document.getElementById("carouselTrack");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        const dotsContainer = document.getElementById("carouselDots");
+
+        if (!track || !prevBtn || !nextBtn || !dotsContainer) return;
+
+        let cards = [];
+        let currentIndex = 0;
+        let scrollEndTimer = null;
+        let resizeTimer = null;
+
+        // Build dot indicators dynamically
+        function buildDots() {
+          dotsContainer.innerHTML = "";
+          cards.forEach((_, idx) => {
+            const dot = document.createElement("button");
+            dot.classList.add("dot");
+            if (idx === currentIndex) dot.classList.add("active");
+            dot.setAttribute("data-index", idx);
+            dot.addEventListener("click", (e) => {
+              e.preventDefault();
+              if (!isMobileView()) return;
+              scrollToCard(idx);
+            });
+            dotsContainer.appendChild(dot);
+          });
+        }
+
+        // Update active dot UI only
+        function updateDotsUI() {
+          const dots = document.querySelectorAll(".dot");
+          dots.forEach((dot, i) => {
+            if (i === currentIndex) dot.classList.add("active");
+            else dot.classList.remove("active");
+          });
+        }
+
+        // Find which card is most centered in the viewport (based on scroll position)
+        function getCenteredCardIndex() {
+          if (!cards.length) return 0;
+          const trackRect = track.getBoundingClientRect();
+          if (trackRect.width === 0) return 0;
+          const centerX = trackRect.left + trackRect.width / 2;
+          let closestIndex = 0;
+          let minDistance = Infinity;
+
+          for (let i = 0; i < cards.length; i++) {
+            const rect = cards[i].getBoundingClientRect();
+            const cardCenterX = rect.left + rect.width / 2;
+            const distance = Math.abs(cardCenterX - centerX);
+            if (distance < minDistance) {
+              minDistance = distance;
+              closestIndex = i;
+            }
+          }
+          return closestIndex;
+        }
+
+        // Sync currentIndex based on scroll position (called after scroll ends)
+        function syncIndexFromScroll() {
+          if (!isMobileView()) return;
+          const newIndex = getCenteredCardIndex();
+          if (
+            newIndex !== currentIndex &&
+            newIndex >= 0 &&
+            newIndex < cards.length
+          ) {
+            currentIndex = newIndex;
+            updateDotsUI();
+          }
+        }
+
+        // Smooth scroll to specific card index (used by dots and arrows)
+        function scrollToCard(index) {
+          if (!cards.length) return;
+          if (index < 0) index = cards.length - 1;
+          if (index >= cards.length) index = 0;
+
+          const targetCard = cards[index];
+          if (!targetCard) return;
+
+          currentIndex = index;
+          targetCard.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest",
+            inline: "center",
+          });
+          updateDotsUI();
+        }
+
+        function nextCard() {
+          if (!isMobileView() || !cards.length) return;
+          let nextIdx = currentIndex + 1;
+          if (nextIdx >= cards.length) nextIdx = 0;
+          scrollToCard(nextIdx);
+        }
+
+        function prevCard() {
+          if (!isMobileView() || !cards.length) return;
+          let prevIdx = currentIndex - 1;
+          if (prevIdx < 0) prevIdx = cards.length - 1;
+          scrollToCard(prevIdx);
+        }
+
+        // Event: handle scroll end to properly sync dot without pulling/jerking
+        function onScrollHandler() {
+          if (!isMobileView()) return;
+          // Clear previous timer to avoid multiple syncs
+          if (scrollEndTimer) clearTimeout(scrollEndTimer);
+          scrollEndTimer = setTimeout(() => {
+            if (isMobileView()) {
+              syncIndexFromScroll();
+            }
+          }, 80); // Delayed sync after scroll momentum finishes — no abrupt repositioning
+        }
+
+        // Refresh carousel: fetch cards, rebuild dots, align initial scroll position (first card centered)
+        function refreshCarousel() {
+          cards = Array.from(track.querySelectorAll(".testimonial-card"));
+          if (cards.length) {
+            currentIndex = 0;
+            buildDots();
+            if (isMobileView()) {
+              // On resize/load, ensure first card is centered without any auto-scroll "pull"
+              setTimeout(() => {
+                if (cards[0] && isMobileView()) {
+                  cards[0].scrollIntoView({
+                    behavior: "auto",
+                    inline: "center",
+                    block: "nearest",
+                  });
+                  syncIndexFromScroll(); // update dot state accordingly
+                }
+              }, 10);
+            }
+          }
+        }
+
+        // Resize handler: switch between desktop and mobile gracefully, no interference
+        function handleResize() {
+          if (resizeTimer) clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(() => {
+            if (!isMobileView()) {
+              // Desktop mode: nothing needed from carousel js, just ensure no active side effects
+              return;
+            } else {
+              // Mobile mode: re-sync cards and ensure snapping is correct
+              refreshCarousel();
+            }
+          }, 100);
+        }
+
+        // Attach all swipe/click events (buttons and dots already added)
+        function attachEvents() {
+          // Scroll event listener: updates index after swipe finishes (no pulling)
+          track.addEventListener("scroll", onScrollHandler);
+
+          // Button listeners
+          prevBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            if (!isMobileView()) return;
+            prevCard();
+          });
+
+          nextBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            if (!isMobileView()) return;
+            nextCard();
+          });
+
+          // Optional: prevent accidental pull-to-refresh on track (but keep swiping smooth)
+          track.addEventListener(
+            "touchstart",
+            (e) => {
+              // Just passive, letting native swipe work without any conflict
+            },
+            { passive: true },
+          );
+        }
+
+        // initialization
+        refreshCarousel();
+        attachEvents();
+        window.addEventListener("resize", handleResize);
+        handleResize();
+
+        // small safety: after full load on mobile, ensure first card is snapped & no weird pulling
+        window.addEventListener("load", () => {
+          if (isMobileView() && cards.length) {
+            setTimeout(() => {
+              cards[0]?.scrollIntoView({
+                behavior: "auto",
+                inline: "center",
+                block: "nearest",
+              });
+              syncIndexFromScroll();
+            }, 30);
+          }
+        });
+      })();
+    </script>
 
     <!-- FINAL CTA SECTION -->
     <section class="final-cta">
